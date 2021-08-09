@@ -1,6 +1,6 @@
 import unittest
 
-from spider.parse import get_article_by_search, get_article_detail
+from spider.parse import get_article_by_search, get_article_detail, get_profile_by_search
 
 
 class TestParse(unittest.TestCase):
@@ -8,6 +8,12 @@ class TestParse(unittest.TestCase):
         with open("./file/article_list.html", encoding='utf-8') as f:
             article_list = get_article_by_search(f.read())
         for item in article_list:
+            print(item)
+
+    def test_parse_gzh_list(self):
+        with open("./file/gzh_list.html", encoding='utf-8') as f:
+            gzh_list = get_profile_by_search(f.read())
+        for item in gzh_list:
             print(item)
 
     def test_parse_article_detail(self):

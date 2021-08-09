@@ -9,3 +9,6 @@ HEADERS = {
                   "Chrome/92.0.4515.107 Safari/537.36",
     "Referer": SOGOU_BASE_URL
 }
+
+TYPE_PROFILE = 1  # 公众号
+TYPE_ARTICLE = 2  # 文章

@@ -4,7 +4,7 @@ from typing import List
 from pydantic import BaseModel, Field
 
 
-class OfficialAccount(BaseModel):
+class Profile(BaseModel):
     wechat_name: str = Field(None, title='公众号名称')
     wechat_id: str = Field(None, title='微信号')
     qr_code: str = Field(None, title='临时二维码')
@@ -20,4 +20,4 @@ class ArticleDetail(BaseModel):
     content_text: str = Field(None, title='微信文本内容')
     content_img_list: List[str] = Field([], title='微信文本中图片列表')
     content_html: str = Field(None, title='微信原文内容')
-    official_account: OfficialAccount = Field(None, title='公众号信息')
+    profile: Profile = Field(None, title='公众号信息')

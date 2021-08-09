@@ -9,7 +9,6 @@ import time
 def format_url(url, base):
     if not url:
         return ''
-
     return base + url if not re.match(r'http(s?)://', url) else url
 
 

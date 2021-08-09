@@ -9,7 +9,7 @@ class TestParse(unittest.TestCase):
 
     def test_search_article(self):
         keyword = '吴签'
-        article_list = self.spider.search_article(keyword, 1)
+        article_list = self.spider.search(keyword, 1)
         for item in article_list:
             print(item.dict())
 
