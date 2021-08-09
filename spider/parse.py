@@ -5,10 +5,10 @@ from __future__ import absolute_import, unicode_literals, print_function
 import re
 from lxml import etree
 
-from model import article_detail, article_list
-from spider.const import WEIXIN_BASE_URL, SOGOU_BASE_URL
-from spider.exceptions import WeixinSogouException
-from spider.utils import get_first_elem, format_url, get_elem_text, format_time
+from model import article_list, article_detail
+from .const import WEIXIN_BASE_URL, SOGOU_BASE_URL
+from .exceptions import WeixinSogouException
+from .utils import get_first_elem, format_url, get_elem_text, format_time
 
 
 def check_sogou_error(text):

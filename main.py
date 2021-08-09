@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-import json
 import logging.config
-import os
 import time
 from typing import List
 import uvicorn
@@ -10,20 +8,18 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from starlette.requests import Request
 from starlette.responses import JSONResponse
+
 from model.article_detail import ArticleDetail
 from model.article_list import ArticleList
 from model.response import Result
 from spider.exceptions import WeixinSogouException
-from spider.api import SpiderApi
+from spider.spider import Spider
 
 app = FastAPI(title="搜狗微信搜索爬虫",
               description="基于搜狗微信搜索的爬虫接口",
               version="1.0.0"
               )
-spider = SpiderApi()
-
-logging_path = os.path.split(os.path.realpath(__file__))[0] + os.sep + 'logging.conf'
-logging.config.fileConfig(logging_path, disable_existing_loggers=False)
+spider = Spider()
 logger = logging.getLogger('spider')
 
 
@@ -71,18 +67,5 @@ async def article_detail(url: str = Query(..., title='临时链接', description
     return Result(data=spider.get_article_content(url))
 
 
-# @app.get("/profile/search", summary="公众号搜索", tags=["公众号"])
-# async def search(keyword: str, page: int = 1):
-#     pass
-#
-#
-# @app.get("/profile/detail", summary="公众号详情", tags=["公众号"])
-# async def profile(url: str):
-#     """
-#     公众号详情
-#     """
-#     pass
-
-
 if __name__ == '__main__':
-    uvicorn.run("main:app", debug=True, reload=True)
+    uvicorn.run("main:spider", debug=True, reload=True, log_level=logging.DEBUG, log_config='logger_config.json')

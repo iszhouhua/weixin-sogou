@@ -9,18 +9,17 @@ from urllib.parse import urlencode
 
 import requests
 
-from model.article_detail import ArticleDetail
-from spider import const, parse
-from spider.const import SOGOU_BASE_URL
-from spider.exceptions import WeixinSogouException, AntiSpiderException
+from spider import parse
+from .const import SOGOU_BASE_URL, HEADERS
+from .exceptions import WeixinSogouException, AntiSpiderException
 
 
-class SpiderApi(object):
+class Spider(object):
     def __init__(self):
         self.cookies = None
 
     def __get(self, url):
-        resp = requests.get(url, headers=const.headers, cookies=self.cookies)
+        resp = requests.get(url, headers=HEADERS, cookies=self.cookies)
 
         if not resp.ok:
             raise WeixinSogouException('搜狗接口请求失败.url:{}'.format(url), resp.status_code)
@@ -59,7 +58,11 @@ class SpiderApi(object):
             'ie': 'utf8'
         }
         url = f'{SOGOU_BASE_URL}/weixin?{urlencode(qs_dict)}'
-        resp = self.__get(url)
+        try:
+            resp = self.__get(url)
+        except AntiSpiderException:
+            # 被反爬了重试一次
+            resp = self.__get(url)
         if resp.cookies:
             self.cookies = resp.cookies
         parse.check_sogou_error(resp.text)

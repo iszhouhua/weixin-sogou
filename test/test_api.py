@@ -1,13 +1,11 @@
-import time
 import unittest
 
-from spider.api import SpiderApi
-from spider.parse import get_article_by_search, get_article_detail
+from spider.spider import Spider
 
 
 class TestParse(unittest.TestCase):
     def setUp(self):
-        self.spider = SpiderApi()
+        self.spider = Spider()
 
     def test_search_article(self):
         keyword = '吴签'
