@@ -29,7 +29,7 @@ def get_elem_text(element, path=None):
         element = element.xpath(path)
         if element is None:
             return ''
-    return ''.join([node.strip() for node in element])
+    return ''.join([node.strip() for node in element]).replace('\n', '').replace('\r', '')
 
 
 def get_first_elem(element, path=None):

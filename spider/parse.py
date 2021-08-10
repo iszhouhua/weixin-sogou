@@ -62,14 +62,14 @@ def get_article_by_search(text):
     for li in lis:
         url = get_first_elem(li, 'div[1]/a/@href')
         if url:
-            title = get_elem_text(li, 'div[2]/h3/a/text()')
+            title = get_elem_text(li, 'div[2]/h3/a//text()')
             imgs = [format_url(get_first_elem(li, 'div[1]/a/img/@src'), "https:")]
             abstract = get_elem_text(li, 'div[2]/p//text()')
             time = get_first_elem(li, 'div[2]/div/span/script/text()')
             profile_info = get_first_elem(li, 'div[2]/div/a')
         else:
             url = get_first_elem(li, 'div/h3/a/@href')
-            title = get_elem_text(li, 'div/h3/a/@text()')
+            title = get_elem_text(li, 'div/h3/a//text()')
             imgs = []
             spans = li.xpath('div/div[1]/a')
             for span in spans:
@@ -86,6 +86,7 @@ def get_article_by_search(text):
         head_image = get_first_elem(profile_info, '@data-headimage')
         wechat_name = get_first_elem(profile_info, 'text()')
         profile_isv = get_first_elem(profile_info, '@data-isv')
+        is_verify = True if profile_isv and int(profile_isv) == 1 else False
 
         articles.append(article_list.ArticleList(
             article=article_list.Article(
@@ -95,11 +96,11 @@ def get_article_by_search(text):
                 abstract=abstract,
                 time=time
             ),
-            official_account=article_list.Profile(
+            profile=article_list.Profile(
                 profile_url=format_url(profile_url, SOGOU_BASE_URL),
                 head_image=head_image,
                 wechat_name=wechat_name,
-                is_verify=bool(profile_isv),
+                is_verify=is_verify,
             )
         ))
     return articles
@@ -129,17 +130,17 @@ def get_profile_by_search(text):
         qr_code = format_url(get_first_elem(li, 'div/div[4]/span/img[1]/@src'), 'https:')
         recent_article = None
         introduction = ''
-        authentication = None
+        authentication = ''
         for node in li.xpath('dl'):
             desc = get_elem_text(node, 'dt/text()')
             if '功能介绍' in desc:
                 introduction = get_elem_text(node, 'dd//text()')
-            elif '微信认证' in desc:
-                authentication = get_first_elem(li, 'dd/i/text()')
+            elif '认证' in desc:
+                authentication = get_elem_text(node, 'dd/text()')
             elif '最近文章' in desc:
-                article_title = get_elem_text(li, 'dl[last()]/dd/a/text()')
-                article_url = format_url(get_first_elem(li, 'dl[last()]/dd/a/@href'), SOGOU_BASE_URL)
-                article_time = get_first_elem(li, 'dl[last()]/dd/span/script/text()')
+                article_title = get_elem_text(node, 'dd/a//text()')
+                article_url = format_url(get_first_elem(node, 'dd/a/@href'), SOGOU_BASE_URL)
+                article_time = get_first_elem(node, 'dd/span/script/text()')
                 if article_time:
                     article_time = re.search(r'timeConvert\(\'(.*?)\'\)', article_time)
                     article_time = format_time(article_time.group(1)) if article_time else None
@@ -157,7 +158,7 @@ def get_profile_by_search(text):
             wechat_id=wechat_id,
             qr_code=qr_code,
             introduction=introduction,
-            authentication=authentication,
+            verify_company=authentication,
             recent_article=recent_article
         ))
     return relist
@@ -203,7 +204,7 @@ def get_article_detail(text):
         content_img_list=img_list,
         content_text=content_text,
         content_html=etree.tostring(content, encoding='utf-8'),
-        official_account=article_detail.Profile(
+        profile=article_detail.Profile(
             qr_code=qr_code,
             wechat_name=wechat_name,
             wechat_id=wechat_id,
@@ -212,7 +213,7 @@ def get_article_detail(text):
     )
 
 
-def get_profile_info(text):
+def get_profile_detail(text):
     """
     获取微信公众号信息
 
@@ -230,7 +231,7 @@ def get_profile_info(text):
     head_image = get_first_elem(profile_info, 'div/span/img/@src')
     wechat_id = get_elem_text(profile_info, 'div/div/p/text()').replace('微信号: ', '')
     wechat_name = get_elem_text(profile_info, 'div/div/strong/text()')
-    qr_code = format_url(get_first_elem(detail, 'div/div[4]/span/img[1]/@src'), 'https:')
+    qr_code = format_url(get_first_elem(detail, '//img[@id="js_pc_qr_code_img"]/@src'), WEIXIN_BASE_URL)
     introduction = get_elem_text(profile_info, 'ul/li[1]/div/text()')
     is_verify = True if profile_info.xpath('ul/li[2]/div/img') else False
     verify_company = None

@@ -81,7 +81,8 @@ class Spider(object):
         ----------
         url : str or unicode
             原文链接，临时链接
-
+        request_type: int, optional
+            链接类型 the default is 2
         Returns
         -------
         ArticleDetail
@@ -103,8 +104,8 @@ class Spider(object):
             url = parse.get_wechat_url(resp.text)
         resp = self.__get(url)
         parse.check_weixin_error(resp.text)
-        content_info =  parse.get_article_detail(resp.text) \
+        content_info = parse.get_article_detail(resp.text) \
             if request_type == TYPE_ARTICLE \
-            else parse.get_article_detail(resp.text)
+            else parse.get_profile_detail(resp.text)
         content_info.temp_url = resp.url
         return content_info

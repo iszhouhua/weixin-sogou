@@ -11,6 +11,7 @@ from starlette.responses import JSONResponse
 
 from model.article_detail import ArticleDetail
 from model.article_list import ArticleList
+from model.profile_detail import ProfileDetail
 from model.profile_list import ProfileList
 from model.response import Result
 from spider.config import TYPE_ARTICLE, TYPE_PROFILE
@@ -60,27 +61,25 @@ async def exception_handler(request: Request, exc: Exception):
 @app.get("/article/search", summary="文章搜索", tags=["文章"], response_model=Result[List[ArticleList]])
 async def article_search(keyword: str = Query(..., title='关键字', description='搜索关键字'),
                          page: int = Query(1, title='页码', description='搜索页码')):
-    return Result(data=spider.search(keyword,page, TYPE_ARTICLE))
+    return Result(data=spider.search(keyword, page, TYPE_ARTICLE))
 
 
 @app.get("/article/detail", summary="文章详情", tags=["文章"], response_model=Result[ArticleDetail])
 async def article_detail(url: str = Query(..., title='临时链接', description='搜狗或微信的临时链接', example='',
                                           regex=r'^http(s?)://(mp\.)?weixin\.(sogou|qq)\.com/+')):
-    return Result(data=spider.get_article_content(url))
+    return Result(data=spider.get_detail(url))
 
 
 @app.get("/profile/search", summary="公众号搜索", tags=["公众号"], response_model=Result[List[ProfileList]])
 async def profile_search(keyword: str = Query(..., title='关键字', description='搜索关键字'),
                          page: int = Query(1, title='页码', description='搜索页码')):
-    return Result(data=spider.search(keyword,page, TYPE_PROFILE))
+    return Result(data=spider.search(keyword, page, TYPE_PROFILE))
 
 
-@app.get("/profile/detail", summary="公众号详情", tags=["公众号"])
-async def profile_detail(url: str):
-    """
-    公众号详情
-    """
-    pass
+@app.get("/profile/detail", summary="公众号详情", tags=["公众号"], response_model=Result[ProfileDetail])
+async def article_detail(url: str = Query(..., title='临时链接', description='搜狗或微信的临时链接', example='',
+                                          regex=r'^http(s?)://(mp\.)?weixin\.(sogou|qq)\.com/+')):
+    return Result(data=spider.get_detail(url, TYPE_PROFILE))
 
 
 if __name__ == '__main__':
