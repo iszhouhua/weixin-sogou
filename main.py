@@ -83,4 +83,4 @@ async def article_detail(url: str = Query(..., title='临时链接', description
 
 
 if __name__ == '__main__':
-    uvicorn.run("main:spider", debug=True, reload=True, log_level=logging.DEBUG, log_config='logger_config.json')
+    uvicorn.run("main:app", debug=True, reload=True, log_level=logging.DEBUG, log_config='logger_config.json')

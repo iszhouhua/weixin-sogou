@@ -69,7 +69,6 @@ class Spider(object):
             resp = self.__get(url)
         if resp.cookies:
             self.cookies = resp.cookies
-        parse.check_sogou_error(resp.text)
         return parse.get_article_by_search(resp.text) \
             if search_type == TYPE_ARTICLE \
             else parse.get_profile_by_search(resp.text)

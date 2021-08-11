@@ -11,13 +11,6 @@ from .exceptions import WeixinSogouException, AntiSpiderException
 from .utils import get_first_elem, format_url, get_elem_text, format_time
 
 
-def check_sogou_error(text):
-    page = etree.HTML(text)
-    error_msg = ''.join(page.xpath('//div[@class="text-info"]//text()'))
-    if error_msg:
-        raise WeixinSogouException(error_msg, 410)
-
-
 def check_weixin_error(text):
     if '为了保护你的网络安全，请输入验证码' in text:
         raise AntiSpiderException('被微信识别为异常请求，请输入验证码或更换IP', 403)
