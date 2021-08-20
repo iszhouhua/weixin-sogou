@@ -2,6 +2,7 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 
+import logging
 import random
 import re
 from time import sleep
@@ -69,9 +70,12 @@ class Spider(object):
             resp = self.__get(url)
         if resp.cookies:
             self.cookies = resp.cookies
-        return parse.get_article_by_search(resp.text) \
+        data_list = parse.get_article_by_search(resp.text) \
             if search_type == TYPE_ARTICLE \
             else parse.get_profile_by_search(resp.text)
+        if not data_list:
+            logging.info(f"关键字【{keyword}】,第{page}页搜索内容为空.search_type:{search_type}")
+        return data_list
 
     def get_detail(self, url, request_type=TYPE_ARTICLE):
         """根据临时链接获取文章内容

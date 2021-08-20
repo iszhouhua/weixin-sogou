@@ -31,9 +31,8 @@ async def http_middleware(request: Request, call_next):
     start_time = time.time()
     response = await call_next(request)
     process_time = time.time() - start_time
-    response.headers["X-Process-Time"] = str(process_time)
-    logger.info('request ip = {} , url = {}({}) ,consume time = {}, queryString = {}'
-                .format(request.client.host, request.url, request.method, process_time, request.query_params))
+    logger.info('request ip = %s , url = %s(%s) ,consume time = %.3fs, queryString = %s',
+                request.client.host, request.url, request.method, process_time, request.query_params)
     return response
 
 
