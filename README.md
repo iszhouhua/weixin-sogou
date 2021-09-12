@@ -49,7 +49,7 @@ Response
 
 返回数据结构
 
-![文章搜索](.\screenshot\article_search.png)
+![文章搜索](screenshot/article_search.png)
 
 #### 文章详情
 
@@ -90,7 +90,7 @@ Response
 
 返回数据结构
 
-![文章详情](./screenshot/article_detail.png)
+![文章详情](screenshot/article_detail.png)
 
 #### 公众号搜索
 
@@ -126,7 +126,7 @@ Response
 
 返回数据结构
 
-![公众号搜索](E:/Python/weixin-sogou/screenshot/profile_search.png)
+![公众号搜索](screenshot/profile_search.png)
 
 #### 公众号详情
 
@@ -157,7 +157,7 @@ Response
 
 返回数据结构
 
-![公众号详情](E:/Python/weixin-sogou/screenshot/profile_detail.png)
+![公众号详情](screenshot/profile_detail.png)
 
 ## 使用说明
 
