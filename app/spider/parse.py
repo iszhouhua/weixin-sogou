@@ -5,15 +5,15 @@ from __future__ import absolute_import, unicode_literals, print_function
 import re
 from lxml import etree
 
-from model import article_list, article_detail, profile_list, profile_detail
-from .config import WEIXIN_BASE_URL, SOGOU_BASE_URL
-from .exceptions import WeixinSogouException, AntiSpiderException
+from .exceptions import AntiSpiderException, WeixinSogouException
+from ..model import article_list, article_detail, profile_list, profile_detail
+from ..config import WEIXIN_BASE_URL, SOGOU_BASE_URL
 from .utils import get_first_elem, format_url, get_elem_text, format_time
 
 
 def check_weixin_error(text):
     if '为了保护你的网络安全，请输入验证码' in text:
-        raise AntiSpiderException('被微信识别为异常请求，请输入验证码或更换IP', 403)
+        raise AntiSpiderException('被微信识别为异常请求.', 403)
     html = etree.HTML(text)
     error_msg = get_elem_text(html, '//div[@class="weui-msg"]/div[@class="weui-msg__text-area"]//text()')
     if error_msg:
@@ -170,7 +170,7 @@ def get_article_detail(text):
     ArticleDetail
     """
     detail = etree.HTML(text)
-    title = get_elem_text(detail, '//h2[@id="activity-name"]/text()')
+    title = get_elem_text(detail, '//h1[@id="activity-name"]/text()')
     time_search = re.search(r'<script(.*)n="(.*?)"(.*)document\.getElementById\(\"publish_time\"\)', text, re.S)
     publish_time = format_time(time_search.group(2)) if time_search else ''
     # 获取微信meta
