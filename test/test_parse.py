@@ -1,6 +1,6 @@
 import unittest
 
-from spider.parse import get_article_by_search, get_article_detail, get_profile_by_search, get_profile_detail
+from app.spider.parse import *
 
 
 class TestParse(unittest.TestCase):

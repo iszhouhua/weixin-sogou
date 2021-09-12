@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 
 class WeixinSogouException(Exception):
     """基于搜狗搜索的的微信爬虫接口  异常类
@@ -15,4 +13,7 @@ class AntiSpiderException(WeixinSogouException):
     """
     反爬虫异常
     """
-    pass
+
+    def __init__(self, message, url):
+        super.__init__(message, 201)
+        self.url = url

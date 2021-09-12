@@ -40,5 +40,9 @@
     "root":{
         "level":"INFO",
         "handlers":["console","info_file","error_file"]
+    },
+    "weixin-sogou":{
+        "level":"DEBUG",
+        "handlers":["console","info_file","error_file"]
     }
 }
